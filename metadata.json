@@ -1,0 +1,9 @@
+{
+  "name": "Exposys Data Labs",
+  "description": "Leading research and development company specializing in AI, Robotics, and Innovation. Now featuring the Project Funding Innovation Hub for research sponsorship.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
+

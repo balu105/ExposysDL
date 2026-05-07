@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Phase 3: Global Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    
+    // Admin check - bootstrap admin email
+    function isAdmin() { 
+      return isSignedIn() && request.auth.token.email == 'balajikc89@gmail.com' && request.auth.token.email_verified == true;
+    }
+
+    // 1. Contact Submissions
+    match /contact_submissions/{id} {
+      allow create: if isValidContact(incoming());
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    function isValidContact(data) {
+      return data.keys().hasAll(['name', 'email', 'message', 'createdAt'])
+        && data.name is string && data.name.size() <= 100
+        && data.email is string && data.email.size() <= 100
+        && data.message is string && data.message.size() <= 5000
+        && data.createdAt is timestamp;
+    }
+
+    // 2. Project Proposals
+    match /project_proposals/{id} {
+      allow create: if isValidProposal(incoming());
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    function isValidProposal(data) {
+      return data.keys().hasAll(['collegeName', 'projectTitle', 'branch', 'guideName', 'guideEmail', 'guideContact', 'team', 'paymentId', 'commencementDate', 'completionDate', 'scope', 'methodology', 'outcome', 'patentPossibility', 'budget', 'totalBudget', 'status', 'submittedAt'])
+        && data.projectTitle is string && data.projectTitle.size() <= 300
+        && data.paymentId is string && data.paymentId.size() <= 100
+        && data.status == 'Pending'
+        && data.totalBudget is number
+        && data.submittedAt is timestamp;
+    }
+
+    // 3. Freelancer Applications
+    match /freelancer_applications/{id} {
+      allow create: if isValidFreelancer(incoming());
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    function isValidFreelancer(data) {
+       return data.keys().hasAll(['name', 'email', 'phone', 'jobRole', 'percentage10', 'percentage12', 'ug', 'pg', 'paymentId', 'status', 'submittedAt'])
+        && data.name is string && data.name.size() <= 150
+        && data.paymentId is string && data.paymentId.size() <= 100
+        && data.status == 'Pending'
+        && data.submittedAt is timestamp;
+    }
+
+    // 4. Workshop Registrations
+    match /workshop_registrations/{id} {
+      allow create: if isValidWorkshop(incoming());
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    function isValidWorkshop(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'occupation', 'workshop', 'createdAt'])
+        && data.name is string && data.name.size() <= 150
+        && data.workshop is string && data.workshop.size() <= 150
+        && data.createdAt is timestamp;
+    }
+
+    // 5. Internship Registrations
+    match /internship_registrations/{id} {
+      allow create: if isValidInternship(incoming());
+      allow get, list, update, delete: if isAdmin();
+    }
+
+    function isValidInternship(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'college', 'degree', 'domain', 'duration', 'createdAt'])
+        && data.name is string && data.name.size() <= 150
+        && data.domain is string && data.domain.size() <= 150
+        && data.createdAt is timestamp;
+    }
+  }
+}

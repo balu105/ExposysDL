@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "ContactSubmission": {
+      "title": "Contact Submission",
+      "description": "Messages sent via the contact form",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "message", "createdAt"]
+    },
+    "ProjectProposal": {
+      "title": "Project Proposal",
+      "description": "Project funding applications from students/colleges",
+      "type": "object",
+      "properties": {
+        "collegeName": { "type": "string" },
+        "projectTitle": { "type": "string" },
+        "branch": { "type": "string" },
+        "guideName": { "type": "string" },
+        "guideEmail": { "type": "string", "format": "email" },
+        "guideContact": { "type": "string" },
+        "team": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "contact": { "type": "string" }
+            }
+          }
+        },
+        "paymentId": { "type": "string" },
+        "commencementDate": { "type": "string" },
+        "completionDate": { "type": "string" },
+        "scope": { "type": "string" },
+        "methodology": { "type": "string" },
+        "outcome": { "type": "string" },
+        "patentPossibility": { "type": "string" },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "materials": { "type": "number" },
+            "labor": { "type": "number" },
+            "travel": { "type": "number" },
+            "report": { "type": "number" },
+            "misc": { "type": "number" }
+          }
+        },
+        "totalBudget": { "type": "number" },
+        "status": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["collegeName", "projectTitle", "guideEmail", "paymentId", "submittedAt"]
+    },
+    "FreelancerApplication": {
+      "title": "Freelancer Application",
+      "description": "Applications for the freelancer program",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "jobRole": { "type": "string" },
+        "percentage10": { "type": "string" },
+        "percentage12": { "type": "string" },
+        "ug": { "type": "string" },
+        "pg": { "type": "string" },
+        "paymentId": { "type": "string" },
+        "status": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "phone", "jobRole", "paymentId", "submittedAt"]
+    },
+    "WorkshopRegistration": {
+      "title": "Workshop Registration",
+      "description": "Registrations for free AI workshops",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "occupation": { "type": "string" },
+        "workshop": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "workshop", "createdAt"]
+    },
+    "InternshipRegistration": {
+      "title": "Internship Registration",
+      "description": "Applications for student internship programs",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "college": { "type": "string" },
+        "degree": { "type": "string" },
+        "domain": { "type": "string" },
+        "duration": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "phone", "college", "domain", "createdAt"]
+    }
+  },
+  "firestore": {
+    "contact_submissions": {
+      "schema": "ContactSubmission",
+      "description": "Collection for contact form messages"
+    },
+    "project_proposals": {
+      "schema": "ProjectProposal",
+      "description": "Collection for research project funding proposals"
+    },
+    "freelancer_applications": {
+      "schema": "FreelancerApplication",
+      "description": "Collection for freelancer job applications"
+    },
+    "workshop_registrations": {
+      "schema": "WorkshopRegistration",
+      "description": "Collection for workshop attendees"
+    },
+    "internship_registrations": {
+      "schema": "InternshipRegistration",
+      "description": "Collection for internship applicants"
+    }
+  }
+}
