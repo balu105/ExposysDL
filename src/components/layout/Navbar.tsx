@@ -40,6 +40,7 @@ const NAV_ITEMS = [
   },
   { name: "WORKSHOPS", path: "/workshops" },
   { name: "CONTACT US", path: "/contact" },
+  { name: "ONLINE PAYMENT", path: "https://www.instamojo.com/@Exposysdatalabs/", isExternal: true },
 ];
 
 export function Navbar() {
@@ -69,28 +70,28 @@ export function Navbar() {
         scrolled ? "bg-white/95 backdrop-blur-md shadow-sm py-2" : "bg-transparent py-4"
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2 sm:space-x-3">
+          <Link to="/" className="flex items-center space-x-2 shrink-0">
             <img 
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnnt6cP2feLtVBrE2orPw1XZNtonHP7e-OGA&s" 
               alt="Exposys Data Labs"
-              className="h-8 sm:h-10 w-auto object-contain"
+              className="h-8 sm:h-9 w-auto object-contain"
               referrerPolicy="no-referrer"
             />
             <div className="flex flex-col">
-              <span className="text-base sm:text-lg lg:text-xl font-display font-bold tracking-tighter text-blue-600 leading-none uppercase">
+              <span className="text-sm sm:text-base font-display font-bold tracking-tight text-blue-600 leading-none uppercase">
                 Exposys
               </span>
-              <span className="text-[10px] sm:text-xs lg:text-xl font-display font-light tracking-tighter text-gray-900 leading-none uppercase">
+              <span className="text-[9px] sm:text-[10px] font-display font-light tracking-tight text-gray-900 leading-none uppercase">
                 Data Labs
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center space-x-6">
-            <div className="flex items-center space-x-6 mr-4 border-r border-gray-100 pr-6">
+          <div className="hidden lg:flex items-center justify-end flex-1 ml-4 xl:ml-8">
+            <div className="flex items-center space-x-3 xl:space-x-5">
               {NAV_ITEMS.map((item) => (
                 <div
                   key={item.name}
@@ -98,16 +99,30 @@ export function Navbar() {
                   onMouseEnter={() => setActiveSubmenu(item.name)}
                   onMouseLeave={() => setActiveSubmenu(null)}
                 >
-                  <Link
-                    to={item.path}
-                    className={cn(
-                      "flex items-center text-[10px] font-semibold tracking-widest text-gray-600 hover:text-blue-600 transition-colors uppercase py-2 whitespace-nowrap",
-                      location.pathname === item.path && "text-blue-600"
-                    )}
-                  >
-                    {item.name}
-                    {item.submenu && <ChevronDown className="ml-1 w-2.5 h-2.5" />}
-                  </Link>
+                  {item.isExternal ? (
+                    <a
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "flex items-center text-[9px] xl:text-[10px] font-bold tracking-wider text-gray-600 hover:text-blue-600 transition-colors uppercase py-2 whitespace-nowrap px-1",
+                        item.name === "ONLINE PAYMENT" && "bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 hover:text-white ml-2"
+                      )}
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={cn(
+                        "flex items-center text-[9px] xl:text-[10px] font-bold tracking-wider text-gray-600 hover:text-blue-600 transition-colors uppercase py-2 whitespace-nowrap px-1",
+                        location.pathname === item.path && "text-blue-600"
+                      )}
+                    >
+                      {item.name}
+                      {item.submenu && <ChevronDown className="ml-1 w-2.5 h-2.5 opacity-50" />}
+                    </Link>
+                  )}
 
                   <AnimatePresence>
                     {item.submenu && activeSubmenu === item.name && (
@@ -132,15 +147,6 @@ export function Navbar() {
                 </div>
               ))}
             </div>
-
-            <a 
-              href="https://www.instamojo.com/@Exposysdatalabs/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-blue-600 text-white text-[10px] font-bold tracking-widest rounded-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/10 whitespace-nowrap"
-            >
-              ONLINE PAYMENT
-            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -168,12 +174,23 @@ export function Navbar() {
               {NAV_ITEMS.map((item) => (
                 <div key={item.name} className="space-y-1">
                   <div className="flex items-center justify-between group">
-                    <Link
-                      to={item.path}
-                      className="flex-1 block px-3 py-3 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all"
-                    >
-                      {item.name}
-                    </Link>
+                    {item.isExternal ? (
+                      <a
+                        href={item.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 block px-3 py-3 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all"
+                      >
+                        {item.name}
+                      </a>
+                    ) : (
+                      <Link
+                        to={item.path}
+                        className="flex-1 block px-3 py-3 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all"
+                      >
+                        {item.name}
+                      </Link>
+                    )}
                     {item.submenu && (
                       <button 
                         onClick={() => setExpandedMobileSubmenu(expandedMobileSubmenu === item.name ? null : item.name)}
@@ -204,16 +221,6 @@ export function Navbar() {
                 </div>
               ))}
 
-              <div className="pt-4 px-3">
-                <a 
-                  href="https://www.instamojo.com/@Exposysdatalabs/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center py-4 bg-blue-600 text-white rounded-xl font-bold text-sm tracking-widest shadow-lg shadow-blue-600/10"
-                >
-                  ONLINE PAYMENT
-                </a>
-              </div>
             </div>
           </motion.div>
         )}
